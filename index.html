@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+            <title></title>
+
+        <link rel="stylesheet" href="lib/leaflet/leaflet.css">
+        <link rel="stylesheet" href="css/style.css">
+     
+    </head>
+
+    <body>
+        <div id="map"></div>
+        <div id="sidebar">
+            <h1>Homesteading on Tribal Land</h1>
+            <label for="tribal-nations">Select Tribal Nation: </label>
+            <select name="tribal-nations" id="tribal-nation">
+                <option>All Nations</option>
+            </select>
+            
+            <p><b>Click a Parcel for More Info</b></p>
+            <div id="selection"></div>
+        </div>
+
+        <script type="text/javascript" src="lib/leaflet/leaflet.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+    </body>
+</html>

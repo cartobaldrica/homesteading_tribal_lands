@@ -1,0 +1,35 @@
+@font-face {
+    font-family: neuton;
+    src: url(fonts/Neuton-Regular.ttf);
+  }
+  @font-face {
+    font-family: neuton;
+    font-weight:bold;
+    src: url(fonts/Neuton-Bold.ttf);
+  }
+  @font-face {
+    font-family: neuton;
+    font-style:italic;
+    src: url(fonts/Neuton-Italic.ttf);
+  }
+  
+body{
+    margin:0;
+    background:black;
+    color:white;
+}
+#map{
+    height:100vh;
+    width:calc(100vw - 275px);
+    display:inline-block;
+}
+#sidebar{
+    width:250px;
+    height:100vh;
+    display:inline-block;
+    overflow:scroll;
+    padding-left:10px;
+    padding-right:10px;
+    font-family:neuton;
+
+}
