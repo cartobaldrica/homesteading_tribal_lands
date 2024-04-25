@@ -19,17 +19,88 @@ body{
     color:white;
 }
 #map{
-    height:100vh;
-    width:calc(100vw - 275px);
+    height:calc(100vh - 60px);
+    width:calc(100vw - 325px);
+    margin-top:60px;
     display:inline-block;
+    background:black;
 }
+/*SIDEBAR*/
 #sidebar{
-    width:250px;
-    height:100vh;
+    width:300px;
+    height:calc(100vh - 60px);
     display:inline-block;
     overflow:scroll;
     padding-left:10px;
     padding-right:10px;
     font-family:neuton;
-
+}
+/*dropdown menu*/
+#year-dropdown{
+  background:black;
+  color:white;
+  border: white 1px solid;
+  font-family:neuton;
+  font-size:16px;
+  padding-bottom:2px;
+}
+/*timeline slider*/
+.range-slider{
+  width:200px;
+}
+/*step buttons*/
+.step, #reset{
+  background:black;
+  color:white;
+  border: white 1px solid;
+  padding:5px;
+  font-family:neuton;
+  font-size:16px;
+}
+#reset:hover, #year-dropdown:hover, .step:hover{
+  background:rgba(255,255,255,0.5);
+  cursor:pointer;
+}
+#reset{
+  margin-bottom:10px;
+}
+option{
+  color:white;
+}
+/*legend*/
+.parcel-legend{
+  margin-top:5px;
+  margin-bottom:5px;
+  vertical-align: middle;
+}
+.legend-block{
+  width:30px;
+  height:20px;
+  display:inline-block;
+  margin-right:5px;
+}
+#tribal-lands{
+  margin-top:20px;
+}
+/*navbar*/
+.navbar{
+  background:black;
+  height:60px;
+  padding:0;
+}
+.navbar-brand, .nav-link, .navbar-toggler{
+  color:white;
+  font-family:neuton;
+}
+.nav-link{
+  font-size:20px;
+}
+.navbar-brand{
+  font-size:25px;
+}
+.navbar-brand:hover, .nav-link:hover{
+  color:gray;
+}
+.navbar-collapse{
+  background:black;
 }
