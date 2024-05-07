@@ -35,6 +35,7 @@ body{
     padding-right:10px;
     font-family:neuton;
 }
+
 /*dropdown menu*/
 #year-dropdown{
   background:black;
@@ -57,13 +58,65 @@ body{
   font-family:neuton;
   font-size:16px;
 }
+/*MOBILE TIMELINE*/
+.mobile-timeline{
+  margin-bottom:25px !important;
+  font-family:neuton;
+  font-size:16px;
+}
+/*ICONS*/
+.icon{
+  width:40px;
+  height:40px;
+  color:white;
+  font-size:30px;
+}
+.icon:hover{
+  cursor:pointer;
+}
+.legendToggle{
+  padding-left:10px;
+}
 /*SELECTION SCREEN*/
 .select{
   width:500px;
   font-family:neuton;
   font-size:16px;
   background:rgba(0,0,0,0.7);
-  padding:10px;
+  padding:10px 10px 0 10px;
+  z-index:1000 !important;
+}
+.arrow{
+  font-size:32px;
+  display:none;
+  position:sticky;
+  bottom:0;
+  text-align: center;
+  width:100%;
+  background:black;
+  margin-bottom:0;
+}
+.blink{
+  animation: blinker 5s linear infinite;
+}
+.select-state{
+  width:100%;
+  text-align: center;
+}
+.close-select{
+  display:none;
+  background:black;
+  color:white;
+  border: white 1px solid;
+  padding:5px;
+  font-family:neuton;
+  font-size:16px;
+  margin:auto;
+  margin-top:15px;
+}
+.close-select:hover{
+  cursor:pointer;
+  background:rgba(255,255,255,0.5);
 }
 /*OVERVIEW*/
 .overview{
@@ -125,10 +178,26 @@ option{
   background:black;
 }
 /*RESPONSIVE STYLING*/
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 500px) {
   .select{
-    width:100vw;
-    height:50vh;
+    width:calc(100vw - 20px);
+    height:calc(100vh - 100px);
     overflow:scroll !important;
+  }
+  .close-select{
+    display:block;
+  }
+  .info{
+    width:150px;
+  }
+  .info > *{
+    display:inline-block;
+    margin-right:10px;
+  }
+}
+/*ANIMATION*/
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }

@@ -1,6 +1,6 @@
-state,total,mapped
-WI,29246,28194
-MN,85072,85695
-OK,99557,84270
-MI,19861,18987
-IA,8851,8490
+state,name,total,mapped
+WI,Wisconsin,29246,28194
+MN,Minnesota,85072,85695
+OK,Oklahoma,99557,84270
+MI,Michigan,19861,18987
+IA,Iowa,8851,8490

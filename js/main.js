@@ -1,5 +1,5 @@
 //let map, tribalNations = [], homesteadData, tribalLand;
-let map, homesteadOverview, nativeHomestead, homestead, homesteadData, landSeizure, landSeizureData, nativePop, statesData, states, currentState, currentStateCode, year = 1862, min, max, select, legend, overview;
+let map, homesteadOverview, nativeHomestead, homestead, homesteadData, landSeizure, landSeizureData, nativePop, statesData, states, currentState, currentStateCode, year = 1862, min, max, select, legend, legendToggle, mobileTimeline, legendTogglePresent = false, overviewPresent = true, overview, info;
 
 L.TopoJSON = L.GeoJSON.extend({
     addData: function (jsonData) {
@@ -17,7 +17,7 @@ L.TopoJSON = L.GeoJSON.extend({
 
 function createMap(){
     //create map 
-    map = L.map('map',{zoomControl: false}).setView([41.737, -98.818], 4);
+    map = L.map('map',{zoomControl: false, scrollWheelZoom:false}).setView([41.737, -98.818], 4);
     
     var basemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -29,6 +29,9 @@ function createMap(){
         position: 'topright'
     }).addTo(map);
 
+    createInterfaceIcons();
+    createMobileTimeline();
+
     createSelection();
 
     createLegend();
@@ -36,25 +39,110 @@ function createMap(){
     createHomesteadOverview();
     addData();
 }
+function createInterfaceIcons(){
+    info = L.control({position:'topleft'});
+    info.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'icon info'); // create a div with a class "legend"
+        let i = document.createElement("p");
+        i.innerHTML = "<p>&#9432</p>";
+
+        i.addEventListener("click",function(){
+            if (currentState){
+                if (overviewPresent == false){
+                    createOverview();
+                    overviewPresent = true;
+                }
+                else{
+                    overview.remove();
+                    overviewPresent = false;
+                }
+            }
+            else{
+                select.addTo(map);
+                scrollArrow();
+                info.remove();
+            }
+        })
+        this._div.insertAdjacentElement("beforeend",i);
+
+        return this._div;
+    };
+    //info.addTo(map)
+    legendToggle = L.control({position:'bottomright'});
+    legendToggle.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'icon legendToggle'); // create a div with a class "legend"
+        this._div.innerHTML = "<p>&#8801</p>"
+
+        this._div.addEventListener("click",function(){
+            if (legendTogglePresent == false){
+                legend.addTo(map);
+                legendTogglePresent = true;
+            }
+            else{
+                legend.remove();
+                legendTogglePresent = false;
+            }
+        })
+
+        return this._div;
+    };
+}
 //create selection screen
 function createSelection(){
     select = L.control({position:'topleft'});
 
     select.onAdd = function(map) {
         this._div = L.DomUtil.create('div', 'select'); // create a div with a class "legend"
+        let button = document.createElement("button");
+        button.innerHTML = "Close Window";
+        button.className = "close-select";
+        
         this._div.innerHTML = "<h1>Homestead Act of 1862</h1>" +
                               "<p>The Homestead Act of 1862 facilitated the transfer of vast amounts of land from the so-called 'public domain' to individual households—driving settlement across much of the Western United States. Public domain lands were all acquired from American Indian nations, through wars and treaties—which were often similarly violent and coercive. The Homestead Act is thus a key component in the larger settler-colonial project, designed to remove Native peoples from the land while simultaneously enforcing a European conception of land-as-property across the U.S.</p>"+
                               "<p>This map juxtaposes the advance of homesteading settlers with the shrinkage of the tribal land base. However, it also includes land parcels acquired through the Indian Homestead Acts of 1875 and 1884, where opened up provisions of the Homestead Act to American Indians. The Indian Homestead Acts complicate the picture of Native geographies in the second half of the 19th century, and the early part of the 20th.</p>" +
-                              "<h2>Select a state to begin</h2>" 
-
+                              "<h2 class='select-state'>Select a state to begin</h2>";     
+        
+        this._div.insertAdjacentElement('beforeend',button);
+        this._div.insertAdjacentHTML('beforeend', "<p class='arrow' alt='Scroll to Continue'><b class='blink'>&#8659</b></p>");
+       
+        //change direction of arrow depending on scroll
+        this._div.addEventListener("scroll",function(elem){
+            if (elem.target.scrollTop == elem.target.scrollTopMax)
+                document.querySelector(".blink").innerHTML = "&#8657";
+            else   
+                document.querySelector(".blink").innerHTML = "&#8659";
+        
+        })
+        //close window button listener
+        button.addEventListener("click",function(elem){
+            info.addTo(map)
+            select.remove();
+        })
+        //hide or show flashing arrow depending on screen size
+        window.addEventListener("resize",scrollArrow)
+        
         return this._div;
     };
 
     select.addTo(map);
+    scrollArrow();
+
+}
+//position scroll arrow
+function scrollArrow(){
+    //position scrolling arrow
+    let controlHeight = document.querySelector(".select").offsetHeight,
+        windowHeight = window.innerHeight;
+
+    if ((windowHeight - controlHeight - 100) <= 0)
+        document.querySelector(".arrow").style.display = "block";
+    else
+        document.querySelector(".arrow").style.display = "none";
+
 }
 //create legend
 function createLegend(){
-    legend = L.control({position:'bottomleft'});
+    legend = L.control({position:'bottomright'});
 
     legend.onAdd = function(map) {
         this._div = L.DomUtil.create('div', 'legend'); // create a div with a class "legend"
@@ -66,6 +154,17 @@ function createLegend(){
 
         return this._div;
     };
+}
+//create mobile timline
+function createMobileTimeline(){
+    mobileTimeline = L.control({position:'bottomleft'});
+
+    mobileTimeline.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'mobile-timeline'); // create a div with a class "legend"
+
+        return this._div;
+    };
+    mobileTimeline.addTo(map);
 }
 //create overview
 function createOverviewContainer(){
@@ -243,10 +342,21 @@ function createHomesteads(state){
         
             return featureYear <= year && stateCode == currentStateCode ? 1: 0;
     }
+    //homestead legend
+    //add legend to map
+    legendToggle.addTo(map);
+    if (window.screen.width >= 500){
+        legend.addTo(map);
+        legendTogglePresent = true;
+    }
 
     restyleHomesteadLayer();
-    createOverview(state);
-    createTimeline();
+    createOverview();
+    if (window.screen.width >= 500)
+        createTimeline(".overview");
+    else
+        createTimeline(".mobile-timeline");
+
     createReset();
 }
 //add homestead layer
@@ -293,22 +403,22 @@ function restyleNativePop(){
     }
 }
 //create timeline interface
-function createTimeline(){
+function createTimeline(element){
     let max = 1930
     let min = 1862
     
     //add dropdown menu
-    document.querySelector('.overview').insertAdjacentHTML('beforeend','<p>Selected Year: <select id="year-dropdown"></selection></p>')
+    document.querySelector(element).insertAdjacentHTML('beforeend','<p>Selected Year: <select id="year-dropdown"></selection></p>')
     for (var i = min; i <= max; i++){
         document.querySelector("#year-dropdown").insertAdjacentHTML('beforeend','<option id="year-dropdown">' + i + '</option>')
     }
 
     //add previous step button
-    document.querySelector('.overview').insertAdjacentHTML('beforeend','<button class="step" id="reverse"><</button>');
+    document.querySelector(element).insertAdjacentHTML('beforeend','<button class="step" id="reverse"><</button>');
     
     //create range input element (slider)
     var slider = "<input class='range-slider' type='range' list='values'></input><datalist id='values'></datalist>";
-    document.querySelector(".overview").insertAdjacentHTML('beforeend',slider);
+    document.querySelector(element).insertAdjacentHTML('beforeend',slider);
 
     //set slider attributes
     document.querySelector(".range-slider").max = max;
@@ -323,9 +433,8 @@ function createTimeline(){
     document.querySelector("#values").insertAdjacentHTML("beforeend","<option value='1940' label='1940'></option>")
     document.querySelector("#values").insertAdjacentHTML("beforeend","<option value='1960' label='1960'></option>")
 
-
     //add next step button
-    document.querySelector('.overview').insertAdjacentHTML('beforeend','<button class="step" id="forward">></button>');
+    document.querySelector(element).insertAdjacentHTML('beforeend','<button class="step" id="forward">></button>');
 
     //update value
     //on button click
@@ -370,26 +479,30 @@ function createTimeline(){
     })
 }
 //create state overview
-function createOverview(state){
+function createOverview(){
     overview.addTo(map);
     let stateOverview;
     //get state record from the the overview object
     homesteadOverview.forEach(function(data){
-        if (state["STUSPS"] == data["state"])
+        if (currentStateCode == data["state"])
             stateOverview = data;
     })
     let percentage = ((Number(stateOverview["mapped"])/Number(stateOverview["total"])) * 100).toFixed(2);
     //create string with state name
-    document.querySelector(".overview").insertAdjacentHTML("beforeend","<h1>" + state["NAME"] + "</h1>")
+    document.querySelector(".overview").insertAdjacentHTML("beforeend","<h1>" + stateOverview["name"] + "</h1>")
     //create string with overall homestead statistics
-    document.querySelector(".overview").insertAdjacentHTML("beforeend","<p>In <b>" + state["NAME"] + "</b>, <b>" + Number(stateOverview["total"]).toLocaleString() + "</b> parcels were acquired through the <b>1862 Homestead Act</b>. This map shows <b>" + Number(stateOverview["mapped"]).toLocaleString() + "</b> parcels, <b>" + percentage + "%</b> of the total.")
-    //add legend to map
-    legend.addTo(map);
+    document.querySelector(".overview").insertAdjacentHTML("beforeend","<p>In <b>" + stateOverview["name"] + "</b>, <b>" + Number(stateOverview["total"]).toLocaleString() + "</b> parcels were acquired through the <b>1862 Homestead Act</b>. This map shows <b>" + Number(stateOverview["mapped"]).toLocaleString() + "</b> parcels, <b>" + percentage + "%</b> of the total.")
+
+
 }
 //create reset button
 function createReset(){
     //add reset button
-    document.querySelector('.overview').insertAdjacentHTML('beforeend','<button id="reset">Reset Map</button>');
+    if (window.screen.width >= 500)
+        document.querySelector('.overview').insertAdjacentHTML('beforeend','<button id="reset">Reset Map</button>');
+    else
+        document.querySelector('.info').insertAdjacentHTML('beforeend','<button id="reset">Reset Map</button>');
+    
     document.querySelector('#reset').addEventListener("click",function(elem){
         resetInterface();
     })
@@ -413,7 +526,15 @@ function resetInterface(){
     //remove legend and overview
     legend.remove();
     overview.remove();
+    //reset current state
+    currentState = null;
     //add selection screen
-    select.addTo(map);
+    if (window.screen.width >= 500){
+        select.addTo(map);
+        info.remove();
+    }
+    //clear mobile timeline
+    document.querySelector(".mobile-timeline").innerHTML = "";
+    document.querySelector("#reset").remove();
 }
 document.addEventListener("DOMContentLoaded", createMap)
