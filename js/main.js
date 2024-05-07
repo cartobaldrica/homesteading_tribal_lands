@@ -1,5 +1,5 @@
 //let map, tribalNations = [], homesteadData, tribalLand;
-let map, homesteadOverview, homestead, homesteadData, landSeizure, landSeizureData, nativePop, statesData, states, currentState, currentStateCode, year = 1862, min, max;
+let map, homesteadOverview, nativeHomestead, homestead, homesteadData, landSeizure, landSeizureData, nativePop, statesData, states, currentState, currentStateCode, year = 1862, min, max, select, legend, overview;
 
 L.TopoJSON = L.GeoJSON.extend({
     addData: function (jsonData) {
@@ -16,16 +16,66 @@ L.TopoJSON = L.GeoJSON.extend({
 });
 
 function createMap(){
-    map = L.map('map').setView([41.737, -98.818], 4);
+    //create map 
+    map = L.map('map',{zoomControl: false}).setView([41.737, -98.818], 4);
     
     var basemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 13
     }).addTo(map);
+    //move zoom control
+    L.control.zoom({
+        position: 'topright'
+    }).addTo(map);
 
+    createSelection();
+
+    createLegend();
+    createOverviewContainer();
     createHomesteadOverview();
     addData();
+}
+//create selection screen
+function createSelection(){
+    select = L.control({position:'topleft'});
+
+    select.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'select'); // create a div with a class "legend"
+        this._div.innerHTML = "<h1>Homestead Act of 1862</h1>" +
+                              "<p>The Homestead Act of 1862 facilitated the transfer of vast amounts of land from the so-called 'public domain' to individual households—driving settlement across much of the Western United States. Public domain lands were all acquired from American Indian nations, through wars and treaties—which were often similarly violent and coercive. The Homestead Act is thus a key component in the larger settler-colonial project, designed to remove Native peoples from the land while simultaneously enforcing a European conception of land-as-property across the U.S.</p>"+
+                              "<p>This map juxtaposes the advance of homesteading settlers with the shrinkage of the tribal land base. However, it also includes land parcels acquired through the Indian Homestead Acts of 1875 and 1884, where opened up provisions of the Homestead Act to American Indians. The Indian Homestead Acts complicate the picture of Native geographies in the second half of the 19th century, and the early part of the 20th.</p>" +
+                              "<h2>Select a state to begin</h2>" 
+
+        return this._div;
+    };
+
+    select.addTo(map);
+}
+//create legend
+function createLegend(){
+    legend = L.control({position:'bottomleft'});
+
+    legend.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'legend'); // create a div with a class "legend"
+        this._div.innerHTML = "<p class='parcel-legend'><b class='legend-block' style='background:#94b8b8'></b>Native Lands</p>" +
+            "<p class='parcel-legend'><b class='legend-block' id='tribal-lands' style='background:#527a7a'></b>Native Homestead</p>" +
+            "<p class='parcel-legend'><b>Homestead Parcels</b></p>" + 
+            "<p class='parcel-legend'><b class='legend-block' style='background:#cc0052'></b>Current Year</p>" +
+            "<p class='parcel-legend'><b class='legend-block' style='background:#ff66a3'></b>Previous Years</p>";
+
+        return this._div;
+    };
+}
+//create overview
+function createOverviewContainer(){
+    overview = L.control({position:'topleft'});
+
+    overview.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'overview'); // create a div with a class "legend"
+
+        return this._div;
+    };
 }
 //fetch and parse state-by-state homestead data
 function createHomesteadOverview(){
@@ -78,24 +128,6 @@ function addData(){
                 }
             }).addTo(map);
         })
-    /*fetch("data/tribal_land_2023.geojson")
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(data){
-            let tribalLand = L.geoJson(data,{
-                style:function(feature){
-                    return{
-                        fillOpacity:0,
-                        color:"#ffff00",
-                        opacity:1,
-                        weight:1,
-                        dashArray:"2 2"
-                    }
-                }
-            }).addTo(map);
-        })
-    */
     //add states data
     fetch("data/states.json")
         .then(res => res.json())
@@ -114,13 +146,11 @@ function addData(){
                     }
                 },
                 onEachFeature:function(feature,layer){
-                    
-                    //style on hover
+                    //style on hover for states that have data
                     if (feature.properties.homestead == 1){
                         /*layer.bindTooltip(feature.properties.STUSPS,{
                             permanent:true
                         })*/
-                        
                         layer.on('mouseover',function(){
                             layer.setStyle({
                                 fillColor:"#e6e6e6"
@@ -142,23 +172,12 @@ function addData(){
                 }
             }).addTo(map);
         })
-
-    /*fetch("data/mn_reservation_homesteads.geojson")
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(data){
-            homesteadData = data;
-            createHomesteads("All Nations");
-        })
-    
-    selectNation();*/
 }
 //create homesteads
 function createHomesteads(state){
     currentStateCode = state["STUSPS"];
-    //remove select a state text
-    document.querySelector("#state-selection").style.display = "none";
+    //remove selection screen
+    select.remove();
     //remove states layer from map
     map.removeLayer(states);
     //add outline of selected state
@@ -166,9 +185,9 @@ function createHomesteads(state){
         style:function(feature){
             return {
                 fillColor:"#333333",
-                fillOpacity:1,
+                fillOpacity:0,
                 color:"#ffffff",
-                weight:0.5
+                weight:1
             }
         },
         filter:function(feature){
@@ -177,65 +196,63 @@ function createHomesteads(state){
         pane:'tilePane'
     }).addTo(map)
     //add homestead data
-    fetch("data/homesteads/" + state["STUSPS"] + "_homesteads.json")
-        .then(res => res.json())
-        .then(function(data){
-            homesteadData = data;
-            addHomesteadLayer();
-        })
-        //to do: mn loads too slowly for the timeline populate
-        .then(function(){
-            createTimeline();
-            createOverview(state);
-        })
-
-}
-//add homestead layer
-function addHomesteadLayer(){
-    if(homestead){
-        map.removeLayer(homestead)
-        homestead = null;
-    }
-
-    homestead = new L.TopoJSON(homesteadData,{
-        style:function(feature){
-            return {
-                fillColor:setColor(feature),
-                color:setColor(feature),
-                fillOpacity:1,
-                opacity:1,
-                weight:0.5
+    homestead = L.vectorGrid.protobuf("http://localhost:9000/geoserver/gwc/service/tms/1.0.0/homestead%3A" + currentStateCode.toLowerCase() + "_homesteads@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf", {
+        vectorTileLayerStyles: {
+            [currentStateCode.toLowerCase() + "_homesteads"]: function(properties){
+                return{   
+                    fillColor:setColor(properties),
+                    fillOpacity:setOpacity(properties),
+                    fill:true,
+                    weight:0,
+                    opacity:0
+                }
             }
-        },
-        filter:function(feature){
-            //get last four digits of date attribute
-            let featureYear = feature.properties.date.substr(feature.properties.date.length - 4)
-            //sometimes, the last four digits of the attribute only include the full year for dates in the 1800s, and switch to a 2 digit year after 1900
-            //if last four digits of date attribute include a slash or dash, take the last 2 digits and combine with 19 to get the full year.
-            featureYear = featureYear.indexOf('/') > -1 ? '19' + featureYear.substr(2) : featureYear.indexOf('-') > -1 ? '19' + featureYear.substr(2) : featureYear;
-
-            if (min)
-                min = featureYear < min ? feature.properties.date.substr(feature.properties.date.length - 4): min;
-            else    
-                min = featureYear
-            //get maximum value
-            /*if (max)    
-                max = featureYear > max ? featureYear: max;
-            else    
-                max = featureYear*/
-            //set maximum value to 1930
-            max = 1930
-            min = 1862
-            
-            return featureYear <= year ? true: false;
-        },
-        pane:'shadowPane'
+        }
     }).addTo(map);
-
-    function setColor(feature){
-        let featureYear = feature.properties.date.substr(feature.properties.date.length - 4)
+    //style homestead data
+    function setColor(props){
+        let featureYear = props.date.substr(props.date.length - 4)
         return featureYear == year ? "#cc0052": "#ff66a3";
     }
+    function setOpacity(props){
+        //get last four digits of date attribute
+        let featureYear = props.date.substr(props.date.length - 4)
+        //sometimes, the last four digits of the attribute only include the full year for dates in the 1800s, and switch to a 2 digit year after 1900
+        //if last four digits of date attribute include a slash or dash, take the last 2 digits and combine with 19 to get the full year.
+        featureYear = featureYear.indexOf('/') > -1 ? '19' + featureYear.substr(2) : featureYear.indexOf('-') > -1 ? '19' + featureYear.substr(2) : featureYear;
+        return featureYear <= year ? 1: 0;
+    }
+    //add native homestead data
+    nativeHomestead = L.vectorGrid.protobuf("http://localhost:9000/geoserver/gwc/service/tms/1.0.0/homestead%3Anative_homesteads@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf", {
+        vectorTileLayerStyles: {
+            "native_homesteads": function(properties){
+                return{   
+                    fillColor:"#527a7a",
+                    fillOpacity:nativeHomesteadOpacity(properties),
+                    fill:true,
+                    weight:0,
+                    opacity:0
+                }
+            }
+        }
+    }).addTo(map);
+    //hide native homesteads outside of states
+    function nativeHomesteadOpacity(props){
+        let featureYear = props.Date.substr(props.Date.length - 4),
+            stateCode = props.State;
+        
+            return featureYear <= year && stateCode == currentStateCode ? 1: 0;
+    }
+
+    restyleHomesteadLayer();
+    createOverview(state);
+    createTimeline();
+    createReset();
+}
+//add homestead layer
+function restyleHomesteadLayer(){
+    homestead.redraw();
+    nativeHomestead.redraw();
     //add seizure data
     restyleSeizureData();
     restyleNativePop();
@@ -270,7 +287,6 @@ function restyleNativePop(){
     //calculate radius for each features
     function setRadius(feature){
         let minRadius = 2;
-        console.log(feature.properties.native_pop)
         var radius = 1.0083 * Math.pow(feature.properties.native_pop / 1000, 0.5715) * minRadius;
     
         return radius;
@@ -278,18 +294,21 @@ function restyleNativePop(){
 }
 //create timeline interface
 function createTimeline(){
+    let max = 1930
+    let min = 1862
+    
     //add dropdown menu
-    document.querySelector('#selection').insertAdjacentHTML('beforeend','<p>Selected Year: <select id="year-dropdown"></selection></p>')
+    document.querySelector('.overview').insertAdjacentHTML('beforeend','<p>Selected Year: <select id="year-dropdown"></selection></p>')
     for (var i = min; i <= max; i++){
         document.querySelector("#year-dropdown").insertAdjacentHTML('beforeend','<option id="year-dropdown">' + i + '</option>')
     }
 
     //add previous step button
-    document.querySelector('#selection').insertAdjacentHTML('beforeend','<button class="step" id="reverse"><</button>');
+    document.querySelector('.overview').insertAdjacentHTML('beforeend','<button class="step" id="reverse"><</button>');
     
     //create range input element (slider)
     var slider = "<input class='range-slider' type='range' list='values'></input><datalist id='values'></datalist>";
-    document.querySelector("#selection").insertAdjacentHTML('beforeend',slider);
+    document.querySelector(".overview").insertAdjacentHTML('beforeend',slider);
 
     //set slider attributes
     document.querySelector(".range-slider").max = max;
@@ -306,7 +325,7 @@ function createTimeline(){
 
 
     //add next step button
-    document.querySelector('#selection').insertAdjacentHTML('beforeend','<button class="step" id="forward">></button>');
+    document.querySelector('.overview').insertAdjacentHTML('beforeend','<button class="step" id="forward">></button>');
 
     //update value
     //on button click
@@ -330,7 +349,7 @@ function createTimeline(){
             //update dropdown
             document.querySelector("#year-dropdown").value = year;
             //add homestead data to map
-            addHomesteadLayer();
+            restyleHomesteadLayer();
         })
     })
     //using slider
@@ -339,7 +358,7 @@ function createTimeline(){
         year = this.value;
         document.querySelector("#year-dropdown").value = year;
         //add homestead data to map
-        addHomesteadLayer();
+        restyleHomesteadLayer();
     });
     //using dropdown menu
     document.querySelector("#year-dropdown").addEventListener("change",function(){
@@ -347,11 +366,12 @@ function createTimeline(){
         year = this.value;
         document.querySelector('.range-slider').value = year;
         //add homestead data to map
-        addHomesteadLayer();
+        restyleHomesteadLayer();
     })
 }
 //create state overview
 function createOverview(state){
+    overview.addTo(map);
     let stateOverview;
     //get state record from the the overview object
     homesteadOverview.forEach(function(data){
@@ -359,26 +379,23 @@ function createOverview(state){
             stateOverview = data;
     })
     let percentage = ((Number(stateOverview["mapped"])/Number(stateOverview["total"])) * 100).toFixed(2);
-    //create string with minimum and maximum date
-    //document.querySelector("#selection").insertAdjacentHTML("afterbegin","<p>Homestead parcels in <b>" + state["NAME"] + "</b> were acquired between <b>" + min + "</b> and <b>" + max + ".</b></p>")
+    //create string with state name
+    document.querySelector(".overview").insertAdjacentHTML("beforeend","<h1>" + state["NAME"] + "</h1>")
     //create string with overall homestead statistics
-    document.querySelector("#selection").insertAdjacentHTML("afterbegin","<p>In <b>" + state["NAME"] + "</b>, <b>" + Number(stateOverview["total"]).toLocaleString() + "</b> parcels were acquired through the <b>1862 Homestead Act</b>. This map shows <b>" + Number(stateOverview["mapped"]).toLocaleString() + "</b> parcels, <b>" + percentage + "%</b> of the total.")
+    document.querySelector(".overview").insertAdjacentHTML("beforeend","<p>In <b>" + state["NAME"] + "</b>, <b>" + Number(stateOverview["total"]).toLocaleString() + "</b> parcels were acquired through the <b>1862 Homestead Act</b>. This map shows <b>" + Number(stateOverview["mapped"]).toLocaleString() + "</b> parcels, <b>" + percentage + "%</b> of the total.")
+    //add legend to map
+    legend.addTo(map);
+}
+//create reset button
+function createReset(){
     //add reset button
-    document.querySelector('#selection').insertAdjacentHTML('afterbegin','<button id="reset">Reset Map</button>');
+    document.querySelector('.overview').insertAdjacentHTML('beforeend','<button id="reset">Reset Map</button>');
     document.querySelector('#reset').addEventListener("click",function(elem){
         resetInterface();
     })
-    //add legend elements
-    document.querySelector("#selection").insertAdjacentHTML("beforeend","<p><b class='legend-block' id='tribal-lands' style='background:#94b8b8'></b>Tribal Lands</p>")
-    document.querySelector("#selection").insertAdjacentHTML("beforeend","<p class='parcel-legend'><b>Homestead Parcels</b></p>")
-    document.querySelector("#selection").insertAdjacentHTML("beforeend","<p class='parcel-legend'><b class='legend-block' style='background:#cc0052'></b>Current Year</p>")
-    document.querySelector("#selection").insertAdjacentHTML("beforeend","<p class='parcel-legend'><b class='legend-block' style='background:#ff66a3'></b>Previous Years</p>")
-
 }
 
 function resetInterface(){
-    //clear sidebar
-    document.querySelector("#selection").innerHTML = "";
     //remove layers
     map.removeLayer(homestead);
     map.removeLayer(currentState);
@@ -393,68 +410,10 @@ function resetInterface(){
     year = 1862;
     //reset min and max values
     min = null, max = null;
-    //add state selection text
-    document.querySelector("#state-selection").style.display = "block";
+    //remove legend and overview
+    legend.remove();
+    overview.remove();
+    //add selection screen
+    select.addTo(map);
 }
-
-/*function createHomesteads(value){
-    tribalLand = L.geoJson(homesteadData,{
-        style:function(feature){
-            return{
-                fillColor:"#c65353",
-                fillOpacity:0.5,
-                color:"#862d2d",
-                opacity:1,
-                weight:1
-            }
-        },
-        filter:function(feature){
-            if (feature.properties.nation == value || value == "All Nations")
-                return true;
-            else    
-                return false; 
-        },
-        onEachFeature:function(feature,layer){
-            layer.on('click',function(){
-                document.querySelector("#selection").innerHTML = "";
-                document.querySelector("#selection").insertAdjacentHTML("beforeend","<p><b>Name: </b>" + feature.properties.name + "</p>")
-                document.querySelector("#selection").insertAdjacentHTML("beforeend","<p><b>Date: </b>" + feature.properties.date + "</p>")
-                document.querySelector("#selection").insertAdjacentHTML("beforeend","<p>" + feature.properties.twprng + " Section: " + feature.properties.sec + ", " + feature.properties.aliquots + "</p>")
-                document.querySelector("#selection").insertAdjacentHTML("beforeend","<a href='" + feature.properties.LINK + "' target='_blank'>Link to Record</a>")
-            
-            })
-            layer.on("mouseover",function(){
-                this.setStyle({
-                    fillOpacity:0.9
-                })
-            })
-            layer.on("mouseout",function(){
-                this.setStyle({
-                    fillOpacity:0.5
-                })
-            })
-        }
-    }).addTo(map);
-
-    if (value == "All Nations")
-        map.setView([47.237, -92.818], 8);
-    else{
-        let bounds = tribalLand.getBounds();
-        map.fitBounds(bounds)
-    }
-
-}
-
-function selectNation(){
-    document.querySelector("#tribal-nation").addEventListener("change",function(){
-        document.querySelector("#selection").innerHTML = "";
-
-        
-        let value = document.querySelector("#tribal-nation").value;
-        map.removeLayer(tribalLand);
-        tribalLand = null;
-        createHomesteads(value);
-    })
-}
-*/
 document.addEventListener("DOMContentLoaded", createMap)
