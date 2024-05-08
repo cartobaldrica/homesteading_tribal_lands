@@ -23,7 +23,7 @@ body{
     width:calc(100vw);
     margin-top:60px;
     display:inline-block;
-    background:black;
+    background:#595959;
 }
 /*SIDEBAR*/
 #sidebar{
@@ -70,12 +70,14 @@ body{
   height:40px;
   color:white;
   font-size:30px;
+  margin-top:0 !important;
 }
 .icon:hover{
   cursor:pointer;
 }
-.legendToggle{
+.legendIcon{
   padding-left:10px;
+  background:black;
 }
 /*SELECTION SCREEN*/
 .select{
@@ -137,6 +139,14 @@ body{
 option{
   color:white;
 }
+.overview-close{
+  position:absolute;
+  top:5px;
+  right:5px;
+}
+.overview-close:hover{
+  cursor:pointer;
+}
 /*LEGEND*/
 .legend{
   font-family:neuton;
@@ -154,6 +164,16 @@ option{
   height:20px;
   display:inline-block;
   margin-right:5px;
+}
+.native-pop-legend{
+  border-radius:50%;
+  background:rgba(255,255,0,0.7);
+  display:inline-block;
+}
+.native-pop-caption{
+  display:inline-block;
+  margin-right:5px;
+  margin-bottom:5px;
 }
 /*navbar*/
 .navbar{
@@ -193,6 +213,9 @@ option{
   .info > *{
     display:inline-block;
     margin-right:10px;
+  }
+  .overview{
+    margin-top:20px !important;
   }
 }
 /*ANIMATION*/

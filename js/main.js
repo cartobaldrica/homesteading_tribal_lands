@@ -1,5 +1,13 @@
-//let map, tribalNations = [], homesteadData, tribalLand;
-let map, homesteadOverview, nativeHomestead, homestead, homesteadData, landSeizure, landSeizureData, nativePop, statesData, states, currentState, currentStateCode, year = 1862, min, max, select, legend, legendToggle, mobileTimeline, legendTogglePresent = false, overviewPresent = true, overview, info;
+let map, 
+    homesteadStats, 
+    nativeHomestead, homestead, 
+    tribalLand, 
+    nativePop, 
+    statesData, states, currentState, 
+    year = 1862, 
+    select, legend, overview, timeline, 
+    infoIcon, legendIcon,
+    showLegend = false, showOverview = true; 
 
 L.TopoJSON = L.GeoJSON.extend({
     addData: function (jsonData) {
@@ -24,73 +32,27 @@ function createMap(){
         subdomains: 'abcd',
         maxZoom: 13
     }).addTo(map);
+
     //move zoom control
     L.control.zoom({
         position: 'topright'
     }).addTo(map);
 
-    createInterfaceIcons();
-    createMobileTimeline();
+    createInterface();
 
-    createSelection();
-
-    createLegend();
-    createOverviewContainer();
-    createHomesteadOverview();
-    addData();
+    createhomesteadStats();
+    
+    addLayers();
 }
-function createInterfaceIcons(){
-    info = L.control({position:'topleft'});
-    info.onAdd = function(map) {
-        this._div = L.DomUtil.create('div', 'icon info'); // create a div with a class "legend"
-        let i = document.createElement("p");
-        i.innerHTML = "<p>&#9432</p>";
-
-        i.addEventListener("click",function(){
-            if (currentState){
-                if (overviewPresent == false){
-                    createOverview();
-                    overviewPresent = true;
-                }
-                else{
-                    overview.remove();
-                    overviewPresent = false;
-                }
-            }
-            else{
-                select.addTo(map);
-                scrollArrow();
-                info.remove();
-            }
-        })
-        this._div.insertAdjacentElement("beforeend",i);
-
-        return this._div;
-    };
-    //info.addTo(map)
-    legendToggle = L.control({position:'bottomright'});
-    legendToggle.onAdd = function(map) {
-        this._div = L.DomUtil.create('div', 'icon legendToggle'); // create a div with a class "legend"
-        this._div.innerHTML = "<p>&#8801</p>"
-
-        this._div.addEventListener("click",function(){
-            if (legendTogglePresent == false){
-                legend.addTo(map);
-                legendTogglePresent = true;
-            }
-            else{
-                legend.remove();
-                legendTogglePresent = false;
-            }
-        })
-
-        return this._div;
-    };
+function createInterface(){
+    createSelection();
+    createLegend();
+    createMobileTimeline();
 }
 //create selection screen
 function createSelection(){
     select = L.control({position:'topleft'});
-
+    //create introduction and selection interface
     select.onAdd = function(map) {
         this._div = L.DomUtil.create('div', 'select'); // create a div with a class "legend"
         let button = document.createElement("button");
@@ -125,8 +87,81 @@ function createSelection(){
     };
 
     select.addTo(map);
-    scrollArrow();
+    //create interface icon
+    info = L.control({position:'topleft'});
+    info.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'icon info'); // create a div with a class "legend"
+        let i = document.createElement("p");
+        i.innerHTML = "&#9432";
 
+        i.addEventListener("click",function(){
+            if (currentState){
+                if (showOverview == false){
+                    createOverview();
+                    showOverview = true;
+                }
+                else{
+                    overview.remove();
+                    showOverview = false;
+                }
+            }
+            else{
+                select.addTo(map);
+                scrollArrow();
+                info.remove();
+            }
+        })
+        this._div.insertAdjacentElement("beforeend",i);
+
+        return this._div;
+    };
+    scrollArrow();
+}
+//create legend
+function createLegend(){
+    //create the legend
+    legend = L.control({position:'bottomright'});
+    legend.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'legend'); // create a div with a class "legend"
+        this._div.innerHTML = "<p class='parcel-legend'><b>Homestead Parcels</b></p>" + 
+            "<p class='parcel-legend'><b class='legend-block' style='background:#cc0052'></b>Current Year</p>" +
+            "<p class='parcel-legend'><b class='legend-block' style='background:#ff66a3'></b>Previous Years</p>" +
+            "<p class='parcel-legend'><b>Native Presence</b></p>" +
+            "<p class='parcel-legend'><b class='legend-block' style='background:#94b8b8'></b>Leg. Tribal Lands</p>" +
+            "<p class='parcel-legend'><b class='legend-block' id='tribal-lands' style='background:#527a7a'></b>Native Homestead</p>";
+
+        return this._div;
+    };
+    //create the legend toggler
+    legendIcon = L.control({position:'bottomright'});
+    legendIcon.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'icon legendIcon'); // create a div with a class "legend"
+        this._div.innerHTML = "<p>&#8801</p>"
+
+        this._div.addEventListener("click",function(){
+            if (showLegend == false){
+                legend.addTo(map);
+                showLegend = true;
+            }
+            else{
+                legend.remove();
+                showLegend = false;
+            }
+        })
+
+        return this._div;
+    };
+}
+//create mobile timline
+function createMobileTimeline(){
+    timeline = L.control({position:'bottomleft'});
+
+    timeline.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'mobile-timeline'); // create a div with a class "legend"
+
+        return this._div;
+    };
+    timeline.addTo(map);
 }
 //position scroll arrow
 function scrollArrow(){
@@ -140,44 +175,8 @@ function scrollArrow(){
         document.querySelector(".arrow").style.display = "none";
 
 }
-//create legend
-function createLegend(){
-    legend = L.control({position:'bottomright'});
-
-    legend.onAdd = function(map) {
-        this._div = L.DomUtil.create('div', 'legend'); // create a div with a class "legend"
-        this._div.innerHTML = "<p class='parcel-legend'><b class='legend-block' style='background:#94b8b8'></b>Native Lands</p>" +
-            "<p class='parcel-legend'><b class='legend-block' id='tribal-lands' style='background:#527a7a'></b>Native Homestead</p>" +
-            "<p class='parcel-legend'><b>Homestead Parcels</b></p>" + 
-            "<p class='parcel-legend'><b class='legend-block' style='background:#cc0052'></b>Current Year</p>" +
-            "<p class='parcel-legend'><b class='legend-block' style='background:#ff66a3'></b>Previous Years</p>";
-
-        return this._div;
-    };
-}
-//create mobile timline
-function createMobileTimeline(){
-    mobileTimeline = L.control({position:'bottomleft'});
-
-    mobileTimeline.onAdd = function(map) {
-        this._div = L.DomUtil.create('div', 'mobile-timeline'); // create a div with a class "legend"
-
-        return this._div;
-    };
-    mobileTimeline.addTo(map);
-}
-//create overview
-function createOverviewContainer(){
-    overview = L.control({position:'topleft'});
-
-    overview.onAdd = function(map) {
-        this._div = L.DomUtil.create('div', 'overview'); // create a div with a class "legend"
-
-        return this._div;
-    };
-}
 //fetch and parse state-by-state homestead data
-function createHomesteadOverview(){
+function createhomesteadStats(){
     fetch("data/homestead_overview.csv")
         .then(res => res.text())
         .then(function(data){
@@ -185,17 +184,16 @@ function createHomesteadOverview(){
                 header: true
             }
             
-            homesteadOverview = Papa.parse(data,config).data;
+            homesteadStats = Papa.parse(data,config).data;
         })
 }
 
-function addData(){
+function addLayers(){
     //add tribal land data, then hide on initial view
     fetch("data/land_seizure.json")
         .then(res => res.json())
         .then(function(data){
-            landSeizureData = data;
-            landSeizure = new L.TopoJSON(landSeizureData,{
+            tribalLand = new L.TopoJSON(data,{
                 style:function(feature){
                     return {
                         fillColor:"#94b8b8",
@@ -241,15 +239,12 @@ function addData(){
                         weight:0.5
                     }
                     function setColor(){
-                        return feature.properties.homestead == 1 ? "#333333": "#000000";
+                        return feature.properties.homestead == 1 ? "#000000": "#333333";
                     }
                 },
                 onEachFeature:function(feature,layer){
-                    //style on hover for states that have data
+                    //style on hover for states that have homestead data
                     if (feature.properties.homestead == 1){
-                        /*layer.bindTooltip(feature.properties.STUSPS,{
-                            permanent:true
-                        })*/
                         layer.on('mouseover',function(){
                             layer.setStyle({
                                 fillColor:"#e6e6e6"
@@ -257,7 +252,7 @@ function addData(){
                         })
                         layer.on('mouseout',function(){
                             layer.setStyle({
-                                fillColor:"#333333"
+                                fillColor:"#000000"
                             })
                         })
                         //zoom to state on click
@@ -274,26 +269,12 @@ function addData(){
 }
 //create homesteads
 function createHomesteads(state){
-    currentStateCode = state["STUSPS"];
+    //set current state
+    let currentStateCode = state["STUSPS"];
     //remove selection screen
     select.remove();
     //remove states layer from map
     map.removeLayer(states);
-    //add outline of selected state
-    currentState = new L.TopoJSON(statesData,{
-        style:function(feature){
-            return {
-                fillColor:"#333333",
-                fillOpacity:0,
-                color:"#ffffff",
-                weight:1
-            }
-        },
-        filter:function(feature){
-            return feature.properties["STUSPS"] == state["STUSPS"] ? true: false;
-        },
-        pane:'tilePane'
-    }).addTo(map)
     //add homestead data
     homestead = L.vectorGrid.protobuf("http://localhost:9000/geoserver/gwc/service/tms/1.0.0/homestead%3A" + currentStateCode.toLowerCase() + "_homesteads@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf", {
         vectorTileLayerStyles: {
@@ -306,7 +287,8 @@ function createHomesteads(state){
                     opacity:0
                 }
             }
-        }
+        },
+        pane:'overlayPane'
     }).addTo(map);
     //style homestead data
     function setColor(props){
@@ -342,35 +324,56 @@ function createHomesteads(state){
         
             return featureYear <= year && stateCode == currentStateCode ? 1: 0;
     }
+    //add outline of selected state
+    currentState = new L.TopoJSON(statesData,{
+        style:function(feature){
+            return {
+                fillColor:"#333333",
+                fillOpacity:stateFillOpacity(feature.properties),
+                opacity:1,
+                color:"#ffffff",
+                weight:stateWeight(feature.properties),
+            }
+        },
+        pane:'overlayPane'
+    }).addTo(map)
+    function stateFillOpacity(props){
+        return props["STUSPS"] == state["STUSPS"] ? 0: 1;
+    }
+    function stateWeight(props){
+        return props["STUSPS"] == state["STUSPS"] ? 1: 0.25;
+    }
     //homestead legend
-    //add legend to map
-    legendToggle.addTo(map);
+    //add legend toggler to map
+    legendIcon.addTo(map);
+    //if screen is large, show legend
     if (window.screen.width >= 500){
         legend.addTo(map);
-        legendTogglePresent = true;
+        showLegend = true;
     }
 
-    restyleHomesteadLayer();
-    createOverview();
+    restyleHomesteadLayer(currentStateCode);
+    createOverview(currentStateCode);
+    //create timeline
     if (window.screen.width >= 500)
-        createTimeline(".overview");
+        createTimeline(".overview",currentStateCode);
     else
-        createTimeline(".mobile-timeline");
+        createTimeline(".mobile-timeline",currentStateCode);
 
     createReset();
 }
 //add homestead layer
-function restyleHomesteadLayer(){
+function restyleHomesteadLayer(currentStateCode){
     homestead.redraw();
     nativeHomestead.redraw();
     //add seizure data
-    restyleSeizureData();
-    restyleNativePop();
+    restyleTribalLand(currentStateCode);
+    restyleNativePop(currentStateCode);
 }
 //show tribal lands for selected state
-function restyleSeizureData(){
+function restyleTribalLand(currentStateCode){
     //restyle tribal land data
-    landSeizure.eachLayer(function(layer){
+    tribalLand.eachLayer(function(layer){
         layer.setStyle({
             fillOpacity:setOpacity(layer.feature),
             opacity:setOpacity(layer.feature)
@@ -382,12 +385,12 @@ function restyleSeizureData(){
     }
 }
 //show native population for selected state
-function restyleNativePop(){
+function restyleNativePop(currentStateCode){
     //restyle native population data
     nativePop.eachLayer(function(layer){
         layer.setStyle({
             fillOpacity:setOpacity(layer.feature),
-            radius:setRadius(layer.feature)
+            radius:setRadius(layer.feature.properties.native_pop)
         })
     })
     //hide native population outside the current state
@@ -395,17 +398,27 @@ function restyleNativePop(){
         return currentStateCode == feature.properties.stusps ? 0.7: 0;
     }
     //calculate radius for each features
-    function setRadius(feature){
+    function setRadius(pop){
         let minRadius = 2;
-        var radius = 1.0083 * Math.pow(feature.properties.native_pop / 1000, 0.5715) * minRadius;
+        var radius = 1.0083 * Math.pow(pop / 1000, 0.5715) * minRadius;
     
         return radius;
     }
+    //crete native population legend
+    if (!document.querySelector(".native-pop-legend")){
+        document.querySelector(".legend").insertAdjacentHTML("beforeend", "<p class='parcel-legend'><b>Native Pop. 2020 (1000s)</b></p>")
+
+        let legendValues = [50000,10000,1000];
+        legendValues.forEach(function(val){
+            let d = setRadius(val) * 2;  
+            document.querySelector(".legend").insertAdjacentHTML("beforeend","<div class='native-pop-legend' style='height:" + d + "px; width:" + d + "px;'></div><p class='native-pop-caption'>" + val/1000 + "</p>")
+        })
+    }
 }
 //create timeline interface
-function createTimeline(element){
-    let max = 1930
-    let min = 1862
+function createTimeline(element, currentStateCode){
+    let max = 1930;
+    let min = 1862;
     
     //add dropdown menu
     document.querySelector(element).insertAdjacentHTML('beforeend','<p>Selected Year: <select id="year-dropdown"></selection></p>')
@@ -458,7 +471,7 @@ function createTimeline(element){
             //update dropdown
             document.querySelector("#year-dropdown").value = year;
             //add homestead data to map
-            restyleHomesteadLayer();
+            restyleHomesteadLayer(currentStateCode);
         })
     })
     //using slider
@@ -467,7 +480,7 @@ function createTimeline(element){
         year = this.value;
         document.querySelector("#year-dropdown").value = year;
         //add homestead data to map
-        restyleHomesteadLayer();
+        restyleHomesteadLayer(currentStateCode);
     });
     //using dropdown menu
     document.querySelector("#year-dropdown").addEventListener("change",function(){
@@ -475,25 +488,42 @@ function createTimeline(element){
         year = this.value;
         document.querySelector('.range-slider').value = year;
         //add homestead data to map
-        restyleHomesteadLayer();
+        restyleHomesteadLayer(currentStateCode);
     })
 }
 //create state overview
-function createOverview(){
-    overview.addTo(map);
+function createOverview(currentStateCode){
     let stateOverview;
-    //get state record from the the overview object
-    homesteadOverview.forEach(function(data){
+    //get state record from the the homestead stats object
+    homesteadStats.forEach(function(data){
         if (currentStateCode == data["state"])
             stateOverview = data;
     })
     let percentage = ((Number(stateOverview["mapped"])/Number(stateOverview["total"])) * 100).toFixed(2);
-    //create string with state name
-    document.querySelector(".overview").insertAdjacentHTML("beforeend","<h1>" + stateOverview["name"] + "</h1>")
-    //create string with overall homestead statistics
-    document.querySelector(".overview").insertAdjacentHTML("beforeend","<p>In <b>" + stateOverview["name"] + "</b>, <b>" + Number(stateOverview["total"]).toLocaleString() + "</b> parcels were acquired through the <b>1862 Homestead Act</b>. This map shows <b>" + Number(stateOverview["mapped"]).toLocaleString() + "</b> parcels, <b>" + percentage + "%</b> of the total.")
+    
+    overview = L.control({position:'topleft'});
 
+    overview.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'overview'); // create a div with a class "legend"
 
+        //create string with state name
+        this._div.insertAdjacentHTML("beforeend","<h1>" + stateOverview["name"] + "</h1>")
+        //create string with overall homestead statistics
+        this._div.insertAdjacentHTML("beforeend","<p>In <b>" + stateOverview["name"] + "</b>, <b>" + Number(stateOverview["total"]).toLocaleString() + "</b> parcels were acquired through the <b>1862 Homestead Act</b>. This map shows <b>" + Number(stateOverview["mapped"]).toLocaleString() + "</b> parcels, <b>" + percentage + "%</b> of the total.")
+
+        return this._div;
+    };
+    
+    overview.addTo(map);
+
+    if (window.screen.width <= 500){
+        document.querySelector(".overview").insertAdjacentHTML("beforeend","<p class='overview-close'>X</p>")    
+
+        document.querySelector(".overview-close").addEventListener("click",function(){
+            showOverview = false;
+            overview.remove();
+        })
+    }
 }
 //create reset button
 function createReset(){
@@ -512,6 +542,9 @@ function resetInterface(){
     //remove layers
     map.removeLayer(homestead);
     map.removeLayer(currentState);
+    //remove legend and overview
+    legend.remove();
+    overview.remove();
     //add states to map
     states.addTo(map);
     states.resetStyle();
@@ -521,20 +554,18 @@ function resetInterface(){
     map.setView([41.737, -98.818], 4);
     //reset year
     year = 1862;
-    //reset min and max values
-    min = null, max = null;
-    //remove legend and overview
-    legend.remove();
-    overview.remove();
-    //reset current state
-    currentState = null;
-    //add selection screen
-    if (window.screen.width >= 500){
+    //set mobile interface
+    if (window.screen.width <= 500){
+        document.querySelector(".mobile-timeline").innerHTML = "";
+        document.querySelector("#reset").remove();
+    }
+    //set desktop interface
+    else{
         select.addTo(map);
         info.remove();
     }
-    //clear mobile timeline
-    document.querySelector(".mobile-timeline").innerHTML = "";
-    document.querySelector("#reset").remove();
+    //remove legend
+    legendIcon.remove();
+    showLegend = false;
 }
 document.addEventListener("DOMContentLoaded", createMap)
