@@ -15,15 +15,177 @@
   
 body{
     margin:0;
-    background:black;
-    color:white;
+    background:#f2f2f2;
+    color:black;
+    font-family:neuton;
+    width:calc(100vw);
+    overflow-x:hidden;
+}
+.container-fluid{
+  padding:0 !important;
+}
+/*homepage*/
+.background{
+  height:calc(100vh);
+  width:calc(100vw);
+}
+.title{
+  height:calc(100vh);
+  padding-top:50px;
+  background-color: rgba(0,0,0,0.7);
+  display:block;
+  color:black;
+}
+.title-block i{
+  color:#ff4d4d;
+  font-style: normal;
+}
+.title-block *{
+  text-align:left;
+}
+.title-block{
+  margin-bottom:25px;
+}
+.page-title{
+  font-size:48px;
+  font-weight:bold;
+}
+.page-subtitle{
+  font-size:30px;
+}
+.author{
+  font-size:20px;
+  margin-bottom:0;
+}
+#map-container{
+  height:100vh;
+  width:100vw;
+  margin-top:60px;
 }
 #map{
-    height:calc(100vh - 60px);
-    width:calc(100vw);
-    margin-top:60px;
-    display:inline-block;
-    background:#595959;
+    height:100%;
+    display:block;
+}
+#map, #map-container{
+  background:#404040;
+}
+.leaflet-popup-content-wrapper{
+  border-radius:0;
+  background: #f2f2f2;
+  border: 1px solid rgba(0,0,0,0.2);
+}
+.leaflet-popup-tip{
+  background: #f2f2f2;
+  border: 1px solid rgba(0,0,0,0.2);  
+}
+.treaty-popup{
+  font-family:neuton;
+  border-radius:0;
+  font-size:16px;
+}
+.treaty-popup b{
+  font-weight:bold;
+}
+/*table of contents and introduction*/
+.outline{
+  margin-top:20px;
+}
+.opening{
+  margin-top:30vh;
+}
+.opening-block{
+  color:black;
+  background:#dbdbdb;
+  padding:10px;
+  margin-top:50px;
+}
+.opening-block p {
+  padding:0;
+  margin:0;
+}
+.intro{
+  padding-left:10px;
+  padding-bottom:50px;
+}
+.intro-paragraph{
+  padding-left:0;
+}
+.intro h4{
+  font-style: italic;
+  font-weight: bold;
+}
+.intro b, .opening b{
+  color:#ff4d4d;
+  font-weight: bold !important;
+}
+.intro hr{
+  width:50%;
+}
+.content{
+  font-size: 24px !important;
+}
+#map, #map-container{
+  background:#404040;
+}
+/*information page*/
+#homesteading, #resistance, #making, #download, #reading, #authors{
+  background:#dbdbdb;
+}
+#making p, #reading p, #download p, #authors p{
+  font-size:16px !important;
+}
+.contents a{
+    display:block;
+    font-size:20px;
+    color:black !important;
+    text-decoration: none;
+}
+.contents a:hover{
+  text-decoration: underline;
+}
+.block{
+  display:block;
+  padding:50px;
+  padding-left:10px;
+}
+.block p, .intro p{
+  display:block;
+  font-size:20px;
+}
+.block a, .intro a{
+  color:black;
+}
+.block .full-width{
+  width:100%;
+}
+.caption{
+  font-size: 14px !important;
+}
+.homestead-color{
+  color:#ff4d4d
+}
+.nh-color{
+  color:#ff4d4d
+}
+.res-color{
+  color:#e0e0d1
+}
+.native-pop-color{
+  color:#a3a3c2;
+}
+b{
+  font-weight:normal
+}
+h2{
+  font-weight:bold;
+  color:#ff4d4d;
+}
+h4{
+  font-weight:bold
+}
+.data-desc b{
+  font-weight:bold;
+  color:#ff4d4d
 }
 /*SIDEBAR*/
 #sidebar{
@@ -35,10 +197,9 @@ body{
     padding-right:10px;
     font-family:neuton;
 }
-
 /*dropdown menu*/
 #year-dropdown{
-  background:black;
+  background:#29293d;
   color:white;
   border: white 1px solid;
   font-family:neuton;
@@ -47,11 +208,11 @@ body{
 }
 /*timeline slider*/
 .range-slider{
-  width:200px;
+  width:calc(100% - 50px);
 }
 /*step buttons*/
 .step, #reset{
-  background:black;
+  background:#29293d;
   color:white;
   border: white 1px solid;
   padding:5px;
@@ -76,83 +237,42 @@ body{
   cursor:pointer;
 }
 .legendIcon{
-  padding-left:10px;
-  background:black;
+  top:10px;
+  padding-left:15px;
+  background:#f2f2f2;
+  border:1px solid rgba(0,0,0,0.2);
+  color:black;
 }
-/*SELECTION SCREEN*/
-.select{
-  width:500px;
-  font-family:neuton;
-  font-size:16px;
-  background:rgba(0,0,0,0.7);
-  padding:10px 10px 0 10px;
-  z-index:1000 !important;
+/*LEAFLET ZOOM ICON*/
+.leaflet-control-zoom a{
+  background:#f2f2f2 !important;
+  color:black;
 }
-.arrow{
-  font-size:32px;
-  display:none;
-  position:sticky;
-  bottom:0;
-  text-align: center;
-  width:100%;
-  background:black;
-  margin-bottom:0;
+.leaflet-control-attribution{
+  background:#f2f2f2 !important;
 }
-.blink{
-  animation: blinker 5s linear infinite;
-}
-.select-state{
-  width:100%;
-  text-align: center;
-}
-.close-select{
-  display:none;
-  background:black;
-  color:white;
-  border: white 1px solid;
-  padding:5px;
-  font-family:neuton;
-  font-size:16px;
-  margin:auto;
-  margin-top:15px;
-}
-.close-select:hover{
-  cursor:pointer;
-  background:rgba(255,255,255,0.5);
+.leaflet-control-attribution > a{
+  color:black;
+
 }
 /*OVERVIEW*/
-.overview{
-  width:300px;
+.timeline{
+  width:400px;
   font-family:neuton;
-  font-size:16px;
-  background:rgba(0,0,0,0.7);
+  font-size:18px;
+  background:#f2f2f2;
+  border:1px solid rgba(0,0,0,0.2);
   padding:10px;
-}
-#reset:hover, #year-dropdown:hover, .step:hover{
-  background:rgba(255,255,255,0.5);
-  cursor:pointer;
-}
-#reset{
-  margin-top:15px;
-  margin-bottom:10px;
-}
-option{
-  color:white;
-}
-.overview-close{
-  position:absolute;
-  top:5px;
-  right:5px;
-}
-.overview-close:hover{
-  cursor:pointer;
+  color:black;
 }
 /*LEGEND*/
 .legend{
   font-family:neuton;
-  background:rgba(0,0,0,0.7);
+  background:#f2f2f2;
   padding:10px;
   font-size:16px;
+  border:1px solid rgba(0,0,0,0.2);
+  color:black;
 }
 .parcel-legend{
   margin-top:5px;
@@ -165,13 +285,16 @@ option{
   display:inline-block;
   margin-right:5px;
 }
+.layer-check label{
+  padding-left:5px;
+}
 .native-pop-legend{
   border-radius:50%;
-  background:rgba(255,255,0,0.7);
+  background:#a3a3c2;
   display:inline-block;
 }
 .native-pop-caption{
-  display:inline-block;
+  display:inline-block !important;
   margin-right:5px;
   margin-bottom:5px;
 }
@@ -198,7 +321,26 @@ option{
   background:black;
 }
 /*RESPONSIVE STYLING*/
-@media screen and (max-width: 500px) {
+@media screen and (min-width: 768px){
+  .background{
+    background-image:url("../img/home_background_large.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+  }
+}
+@media screen and (max-width: 768px){
+  .background{
+    background-image:url("../img/homestead-act-xl.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+  }
+}
+@media screen and (max-width: 576px) {
+  .background{
+    background-image:url("../img/homestead-act-xl.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+  }
   .select{
     width:calc(100vw - 20px);
     height:calc(100vh - 100px);
@@ -217,10 +359,8 @@ option{
   .overview{
     margin-top:20px !important;
   }
-}
-/*ANIMATION*/
-@keyframes blinker {
-  50% {
-    opacity: 0;
+  .timeline{
+    width:calc(100vw - 20px);
+    bottom:20px;
   }
 }

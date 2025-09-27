@@ -5,15 +5,185 @@
         <meta name="viewport" content="width=device-width">
             <title></title>
 
+        <link rel="stylesheet" href="lib/leaflet/leaflet.css">
         <link rel="stylesheet" href="lib/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css">
      
     </head>
 
     <body>
-        <top-navbar></top-navbar>
-        
+        <!--<top-navbar></top-navbar>-->
+        <div class="container-fluid">
+            <div class="background">
+                <div class="row title">
+                    <div class="opening offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                        <div class="opening-block">
+                            <h4>The <b>Homestead Act of 1862</b> transferred millions of acres of land, seized from Tribal Nations, to individual settlers.</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row outline">
+                    <div class="offset-lg-4 col-lg-4 offset-md-4 col-md-4 offset-sm-1 col-sm-10 col-12">
+                        <img id="states" src="img/states.svg">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="title-block offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                        <h1 class="page-title">Homesteading, <i>Dispossession,</i> and Resistance in the Upper Midwest</h1>
+                        <p class="author">Gareth Baldrica-Franklin and Kasey Keeler</p>
+                        <p class="date">September 20, 2025.</p>
+                    </div>
+                </div>
+                <div class="row intro">
+                    <div class="intro-paragraph offset-lg-3 col-lg-3 offset-md-2 col-md-4 offset-sm-1 col-sm-5 col-12">
+                        <p>This project maps the spread of homesteads in Michigan, Minnesota, and Wisconsin. Inspired by projects like <a href="https://www.landgrabu.org/">Land Grab Universities</a> and <a href="https://dsl.richmond.edu/panorama/homesteading/map/text/dispossession">Homesteading and Indigenous Dispossesion</a>, we created this map to better understand the spatial distribution of homestead parcels in the Upper Midwest, as well as the presence and resistance of Indigenous people in response to these waves of settlement.</p>
+                    </div>
+                    <div class="offset-lg-1 col-lg-3 col-md-4 col-sm-5 col-12">
+                        <h2>Contents</h2>
+                        <div class="contents">
+                            <a class="content" href="#homesteading">Homesteading</a>
+                            <a class="content" href="#dispossesion">Dispossesion</a>
+                            <a class="content" href="#resistance">Resistance</a>
+                            <a class="content" href="#map-desc">The Map</a>
+                            <hr>
+                            <a href="#making"><i>Making the Map</i></a>
+                            <a href="#download"><i>Download the Data</i></a>
+                            <a href="#reading"><i>Further Reading</i></a>
+                            <a href="#authors"><i>About the Authors</i></a>
+                        </div>
+                    </div>
+                </div>
+                <div id="homesteading" class="row block">
+                    <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                        <h2>Homesteading</h2>
+                        <p>The <b>Homestead Act of 1862</b> allowed settlers to claim up to 160 acres of "public land" from the federal government, essentially for free. To recieve a land title, settlers had to be citizens, or intended citizens, and were required to occupy their parcel for 5 years and make improvements.</p>
+                        <p>Between 1863 and the 1930s, the Homestead Act transfered over 270 million acres from the U.S. government to individual settlers, representing approximately <b class="homestead-color">10% of U.S. land area</b>. Successful homesteads represented <b class="homestead-color">6% of land area in Michigan, 9% in Wisconsin, and 20% in Minnesota.</b></p>
+                        <img class="full-width" src="img/homestead_doc.png">
+                        <p class="caption">Land patent recieved through the Homestead Act, issued to John B. McNamee and Charles Binding in Dane County, Wisconsin.</p>
+                    </div>
+                </div>
+                <div id="dispossesion" class="row block">
+                    <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                        <h2>Dispossession</h2>
+                        <p>Land distributed by the Homestead Act was exclusively acquired from Tribal Nations through <b class="homestead-color">coercive treaties</b> (which often followed violent struggle) and direct land seizure. Once acquired, the land underwent an ideological transformation—from land as relation or kin, to land as property.</p>
+                        <p>Surveying and mapping themselves were key tools in this transformation, measuring and parceling space into easily defineable property lines. In other words, When land was acquired by the U.S., it had to be surveyed prior to settlement. The Public Land Survey System (PLSS) was the method used to survey all land acquired by the U.S. after 1785.</p>
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <img class="full-width"src="img/Theoreticaltownshipmap.png">
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <img class="full-width"src="img/mankato_execution.jpg">
+                            </div>
+                        </div>
+                        <p class="caption">Diagram of how individual 6x6 square mile sections of land were divided through the PLSS.</p>
+                        <p>In the Upper Midwest, violent conflicts such as the U.S. Dakota War—driven by the pressure of settlement, broken treaties, and the imminent starvation of the Dakota people—were used to justify the necessity of dispossession. <b class="homestead-color">There was no place for American Indians in the project of American settlement.</b></p>
+                        <p>Importantly, dispossession didn't end with treaty-making and homesteading. Rather, settler colonialism continues to define how land is managed and accessed.</p>
+                    </div>
+                </div>
+                <div id="resistance" class="row block">
+                    <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                        <h2>Resistance</h2>
+                        <p>Despite the violence of settlement, and the legal and ideologically transofrmation of land, American Indians resisted through occupation of their homelands. In Wisconsin, despite repeated attempts at the removal of the Ho-Chunk, they continually returned to live where always had. Therefore, maps of treaties and homesteads cannot possibly represent the complex geographies of Native movement and resistance. As Mishuana Goeman writes: <b class="nh-color">“Unlike the maps that designate Indian land as existing only in certain places, wherever we went there were Natives and Native spaces, and if there weren’t, we carved them out.”</b></p>
+                        <p>American Indians also occassionally—though rarely—used the Homestead Act itself to acquire or re-acquire land. While the Act makes no explicity reference to race, it was limited by citizenship, a legal status largely foreclosed to American Indians. In 1875, an act of congress extended the Homestead Act to American Indians, though they had to relinquish their tribal affiliations in order to acquire land. An amendment in 1884 lessened requirements for improvements to the land, but also stipulated that parcels were required to remain in trust for 25 years before a land title was distributed. These so-called <b class="nh-color">Indian Homestead Acts</b> were therefore sparsely used, though in Wisconsin were used by both Ho-Chunk and Potawatomi.</p>
+                    </div>
+                </div>
+                <div id="map-desc" class="row block">
+                    <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                        <h2>The Map</h2>
+                        <h4>What this map shows:</h4>
+                        <p>Lands titled under the Homestead Act of 1862, including: <b class="homestead-color">96% of homestead parcels in Michigan, 100.1% of homestead parcels in Minnesota, 96% of homestead parcels in Wisconsin. </b>Parcels acquired through the Indian Homestead Acts. Treaty designations and reservation boundaries. 2020 Native populations by county.</b>
+                        <h4>What this map does NOT show:</h4>
+                        <p>The extent of Native interaction with homesteaders, and overall resistance to settlement. Failed homestead attempts.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="map-container" class="row block">
+                <div id="map" class="offset-md-1 col-md-10 col-12"></div>
+            </div>
+
+            <div id="making" class="row block">
+                <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                    <hr>
+                    <h2>Making the Map</h2>
+                    <h4>Creating the Homestead Dataset</h4>
+                    <p>Our homestead parcel data set was created using data provided by the Bureau of Land Mangement's General Land Office (GLO) records <a href="https://glorecords.blm.gov/search/default.aspx">database</a>. While the GLO database lists the amount of data it has, it does not compare this amount to the total amount of homesteads. This means that we had to calculate the missing homesteads using numbers provided by <a href="https://www.nps.gov/home/learn/historyculture/homesteading-by-the-state.htm">Homestead National Park</a>—which shows there are homesteads missing from the GLO database.</p>
+                    <p>There is no easy way to access bulk data from the GLO database. Instead, we had to create a python script to scrape data off the website. You are able to download the script <a href="github">here</a>. The script allows you to download data from the GLO database for any title transfer authority, not just the Homestead Act, and for any state. The script has three options:</p>
+                    <ul class="data-desc">
+                        <li><b>State</b> — A 2-letter state postal code (i.e. WI for Wisconsin). In our case, we ran the script three times, once for each of Michigan (MI), Minnesota (MN), and Wisconsin (WI)</li>
+                        <li><b>Title Transfer Authority</b> — a 6-digit code specifying the legistlation or authority under which the parcel was titled. The Homestead Act's code is 251101. A list of other codes can be found <a href="https://glorecords.blm.gov/reference/default.aspx#id=05_Appendices|03_Title_Transfer_Authorities">here</a>.</li>
+                        <li><b>Level of Detail (1,2,3)</b> — Specifies how much detail the scraper is going to use. The GLO website limits the amount of search results for a given geograph to 900. 1 = Highly detailed. For use if you are searching for an authority with many parcels. 2 = County level. For use if you are searching for an authority with less than 900 parcels per county. 3 = State Level. For use if you are searching for an authority with less than 900 parcels in the whole state. We chose 1.</li>
+                    </ul>
+                    <p>The script will output two .csv files:</p>
+                    <ul class="data-desc">
+                        <li><b>[selected state]_parcels.csv: </b>Contains every record scraped from the GLO database. Each line in the .csv is a single record</li>
+                        <li><b>[selected state]_parcels_edited.csv: </b>Splits each records scraped from the GLO database into individual parcel segments (aliquots). This file is able to be joined with a GIS file</li>
+                    </ul>
+                    <p>With the <b>[selected state]_parcels_edited.csv</b>, you are able to join the generated parcel dataset with our prepared spatial data. The <a >PLSS intersected</a> dataset is the most comprehensive PLSS dataset, though it varies greatly from state-to-state. Michigan, Minnesota, and Wisconsin have good, comprehensive coverage.</p>
+                    <p>Our <a href="data/mi_mn_wi_plss.gpkg"><i>plss_mi_mn_wi</i></a> dataset contains a few extra fields to increase ease of joining to the csv file generated by the web scraper. The field <i>loc_code</i>, is present in both files. If you want to join PLSS data from another state, you will need to prepare an appropriate join field.</p>
+                    <p>Once we joined our csv with the PLSS GIS data, we dissolved the file based on the document number, meaning there is a single area for each record.</p>
+                    <h4>Creating the Treaties Dataset</h4>
+                    <p>The treaty dataset is a modified version of the Royce Report, a 1890s report that described treaty-defined reservations and cessions using PLSS language. The Royce report has been <a>digitized</a>. However, the digitized data make no disctinction between the type of land included in the dataset. Specifically, if the land is ceded, a reservation, or if the land was at one time a reservation, and later ceded. These data were added through careful consulation of the original Royce report.</p>
+                    <p>To account for these nuances, three fields have been added:</p>
+                    <ul class="data-desc">
+                        <li><b>type:</b> whether the land was a cession or a reservation.</li>
+                        <li><b>e_date:</b> the date in which the land was ceded. In the case of reservation land that remains governed by tribal nations to this day, this date is 2019.</li>
+                        <il><b>s_date:</b> the date in which particular land went into Tribal control. Typically, this number is most relevant for reservations which were later ceded. For large inital cessions, this number is 0, reflecting that prior the cession, the land existed outside a Western framework of land ownership.</il>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="download" class="row block">
+                <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                    <h2>Download the Data</h2>
+                    <p>Our geospatial data can be <a href="/data/mapping_dispossession_upper_midwest.gpkg" download>downloaded</a> as a Geopackage, which includes the following layers (see description of how layers were made in the previous section):</p>
+                    <ul class="data-desc">
+                        <li><b>mi_homesteads_aggregated</b>: Homestead parcels for Michigan.</li>
+                        <li><b>mn_homesteads_aggregated</b>: Homestead parcels for Minnesota.</li>
+                        <li><b>umw_land_treaties</b>: Treaty and reservation boundaries for the upper midwest (umw).</li>
+                        <li><b>umw_native_homesteads_aggregated</b>: Native Homestead parcels for the upper midwest.</li>
+                        <li><b>umw_native_population_2020</b>: Native population by county in 2020.</li>
+                        <li><b>wi_homesteads_aggregated</b>: Homestead parcels for Wisconsin.</li>
+                    </ul>
+                    <p>Our Homestead Parcel data can be <a href="/data/upper_midwest_homesteads.csv" download>downloaded</a> as a .csv:</p>
+                </div>
+            </div>
+
+            <div id="reading" class="row block">
+                <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                    <h2>Further Reading</h2>
+                    <ul>
+                        <li><a href="https://iltf.org/land-issues/history/">History of Native Land Tenure — Indian Land Tenure Foundation</a></li>
+                        <li><a href="https://www.ghi-dc.org/fileadmin/publications/Bulletin/bu67/17.pdf">"The Indians Must Yield": Antebellum Free Land, the Homestead Act, and the Displacement of Native People — Wilm (2021)</a></li>
+                        <li><a href="https://digitalcommons.unl.edu/greatplainsresearch/928/">Mapping the Dispossession: Scandinavian Homesteading at Fort Totten 1900-1930 — Hansen and Duffy (2008)</a></li>
+                        <li><a href="https://iportal.usask.ca/record/67398">“Great Frauds and Grievous Wrongs”: Mapping the Loss of Kickapoo Allotment Lands — Egbert and Smith (2017)</a></li>
+                        <li><a href="https://openrivers.lib.umn.edu/article/mapping-potawatomi-presences/">Restorative Cartography of the Theakiki Region: Mapping Potawatomi Presences in Indiana — Pochedly (2021)</a></li>
+                        <li><a href="https://www.jstor.org/stable/1515327?seq=1">Law, Property, and the Geography of Violence: The Frontier, the Survey, and the Grid — Blomley (2003)</a></li>
+                        <li><a href="https://www.jstor.org/stable/48671433"> “A Structure, Not an Event”: Settler Colonialism and Enduring Indigeneity — Kauanui (2016)</a></li>
+                        <li><a href="https://www.tandfonline.com/doi/pdf/10.1080/14623520601056240">Settler colonialism and the elimination of the native — Wolfe (2006)</a></li>
+                    </ul>
+                    </div>
+            </div>
+
+            <div id="authors" class="row block">
+                <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10 col-12">
+                    <h2>About the Authors</h2>
+                    <h4>Gareth Baldrica-Franklin</h4>
+                    <p>Gareth Baldrica-Franklin is a PhD student in Geography at UW. He studies a variety of map-related topics, informed by Indigenous, feminist, and critical scholarship—including the relationship between mapmaking and storytelling, and how maps could be used to connect us more deeply to our landscape. In addition to Mapping Teejop, Gareth has worked on Global Madison, an educational walking tour designed to teach students about globalization, and he is currently working on a project with Dr. Keeler connecting the Homestead Act to Indigenous dispossession. He is of settler descent, hailing from the unceded territory of the Multnomah and Clackamas peoples in modern day Portland, Oregon.</p>
+                    <h4>Kasey Keeler</h4>
+                    <p>Kasey Keeler is an Assistant Professor at UW with a joint appointment in the American Indian & Indigenous Studies Program and the School of Human Ecology. Dr. Keeler is an enrolled tribal citizen of the Tuolumne Band of Me-Wuk Indians (California) and is a direct descendant of the Citizen Potawatomi Nation (Oklahoma). Keeler’s work centers federal Indian policy, American Indian land and property ownership, histories of place and placemaking, dispossession, (sub)urbanization, and public memory. Her first book, American Indians and the American Dream: Policies, Place, and Property in Minnesota was published in 2023.</p>
+                </div>
+            </div>
+        </div>
+
+
         <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="lib/leaflet/leaflet.js"></script>
+        <script type="text/javascript" src="lib/topojson.js"></script>
+        <script type="text/javascript" src="lib/protomaps-leaflet.js"></script>
+        <script type="text/javascript" src="js/main_pm.js"></script>
         <!--site components-->
         <script type="text/javascript" src="js/components/navbar.js"></script>
 
