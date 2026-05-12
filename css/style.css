@@ -60,7 +60,7 @@ body{
 #map-container{
   height:100vh;
   width:100vw;
-  margin-top:60px;
+  margin:0;
 }
 #map{
     height:100%;
@@ -173,9 +173,6 @@ body{
 .native-pop-color{
   color:#a3a3c2;
 }
-b{
-  font-weight:normal
-}
 h2{
   font-weight:bold;
   color:#ff4d4d;
@@ -237,11 +234,17 @@ h4{
   cursor:pointer;
 }
 .legendIcon{
-  top:10px;
-  padding-left:15px;
+  top:5px;
   background:#f2f2f2;
   border:1px solid rgba(0,0,0,0.2);
   color:black;
+  border-radius: 3px;
+}
+.legendIcon p{
+  top:-5px;
+  font-size:25pt;
+  padding-left:8px;
+  position:relative;
 }
 /*LEAFLET ZOOM ICON*/
 .leaflet-control-zoom a{
@@ -265,6 +268,15 @@ h4{
   padding:10px;
   color:black;
 }
+#about{
+  overflow:scroll;
+  height:40vh;
+  margin-top:20px;
+  display:none;
+}
+#about p {
+  font-size:16px;
+}
 /*LEGEND*/
 .legend{
   font-family:neuton;
@@ -287,6 +299,14 @@ h4{
 }
 .layer-check label{
   padding-left:5px;
+}
+.about-layer-check{
+  margin-top:10px;
+  text-decoration:underline;
+  font-variant: small-caps;
+}
+.about-layer-check:hover{
+  cursor:pointer;
 }
 .native-pop-legend{
   border-radius:50%;
