@@ -487,7 +487,7 @@
                 <p>Lands titled under the Homestead Act of 1862, including: <b class="homestead-color">96% of homestead parcels in Michigan, 100.1% of homestead parcels in Minnesota, 96% of homestead parcels in Wisconsin.</b> Parcels acquired through the Indian Homestead Acts, and treaty designations and reservation boundaries, and American Indian populations by county based on decennial censuses.</p>\
                 <h4>What this map does NOT show:</h4>\
                 <p>The extent of Native interaction with homesteaders, and overall resistance to settlement, failed homestead attempts, American Indian people not counted by the census.</p>\
-                <p>For inofmration about how the map and data were created, please visit the project <a href="https://github.com/cartobaldrica/homesteading_tribal_lands">Github page</a>.</p>\
+                <p>For information about how the map and data were created, please visit the project <a href="https://github.com/cartobaldrica/homesteading_tribal_lands">Github page</a>.</p>\
                 <p><i>This map was created by Gareth Baldrica-Franklin and Kasey Keeler<i></p></div>'
         
         document.querySelector(element).insertAdjacentHTML('beforeend',html)
