@@ -339,6 +339,7 @@
 
     //create timeline interface
     function createTimeline(element) {
+
         let max = 1930;
         let min = 1862;
 
@@ -425,6 +426,26 @@
                     fillOpacity: setOpacity(feature.properties.DECADE)
                 }
             })
+
+            //remove native population if before 1900
+            if (year <= 1900 && showNativePop == true){
+                document.querySelector(".native-pop-legend-container").remove();
+                nativePop.remove(map)
+            }
+            //show native population if box is checked and after 1900
+            if (year >= 1900 && showNativePop == true){
+                nativePop.addTo(map)
+                if (!document.querySelector(".native-pop-legend-container")){
+                    document.querySelector(".legend").insertAdjacentHTML('beforeend', nativePopLegend)
+                    document.querySelector('.native-pop-label').innerHTML = 'Native Pop. '  + String(year).substring(0,3) + '0';
+                }
+
+            }
+            //disable checkbox if year is less than 1900
+            if (year <= 1900)
+                document.querySelector("#native-pop").disabled = true
+            if (year >= 1900)
+                document.querySelector("#native-pop").disabled = false
             //update legend
             if (document.querySelector('.native-pop-label'))
                 document.querySelector('.native-pop-label').innerHTML = 'Native Pop. '  + String(year).substring(0,3) + '0';
@@ -435,7 +456,7 @@
     //create layer toggle
     function layerToggle(element) {
         document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input type='checkbox' id='treaties'><label for='#treaties'>Treaty Outlines</label></div>")
-        document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input type='checkbox' id='native-pop'><label for='#native-pop'>Native Population (Census)</label></div>")
+        document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input disabled type='checkbox' id='native-pop'><label for='#native-pop'>Native Population (After 1900)</label></div>")
         document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='about-layer-check' id='about-toggle'><a>More About this Map</a></div>")
 
         //toggle for treaty layers
@@ -455,15 +476,20 @@
         })
         //toggle for native population points
         document.querySelector("#native-pop").addEventListener("input", function (e) {
-            showNativePop = e.target.checked;
-            if (e.target.checked) {
-                nativePop.addTo(map);
-                document.querySelector(".legend").insertAdjacentHTML('beforeend', nativePopLegend)
-                document.querySelector('.native-pop-label').innerHTML = 'Native Pop. '  + String(year).substring(0,3) + '0';
-            }
-            else {
-                nativePop.remove(map)
+            if (document.querySelector(".native-pop-legend-container")){
                 document.querySelector(".native-pop-legend-container").remove();
+            }
+            showNativePop = e.target.checked;
+            if (year >= 1900 ){
+                if (e.target.checked) {
+                    nativePop.addTo(map);
+                    document.querySelector(".legend").insertAdjacentHTML('beforeend', nativePopLegend)
+                    document.querySelector('.native-pop-label').innerHTML = 'Native Pop. '  + String(year).substring(0,3) + '0';
+                }
+                else {
+                    nativePop.remove(map)
+                    document.querySelector(".native-pop-legend-container").remove();
+                }
             }
         })
         //toggle for about button
