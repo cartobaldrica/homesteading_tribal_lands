@@ -53,7 +53,7 @@
     function createLegend() {
         //create native population points for the legend
         let legendValues = [2500, 1000, 100];
-        nativePopLegend += "<div class='native-pop-legend-container'><p class='parcel-legend'><b class='native-pop-label'>Native Pop. " + String(year).substring(0,3) + "0</b></p>"
+        nativePopLegend += "<div class='native-pop-legend-container'><p class='parcel-legend'><b class='native-pop-label'>Census Pop. " + String(year).substring(0,3) + "0</b></p>"
         legendValues.forEach(function (val, i) {
             let d = setRadius(val) * 2;
             nativePopLegend += "<div class='native-pop-legend' style='height:" + d + "px; width:" + d + "px;'></div><p class='native-pop-caption'>" + val + "</p>"
@@ -435,7 +435,7 @@
     //create layer toggle
     function layerToggle(element) {
         document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input type='checkbox' id='treaties'><label for='#treaties'>Treaty Outlines</label></div>")
-        document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input type='checkbox' id='native-pop'><label for='#native-pop'>Native Population</label></div>")
+        document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input type='checkbox' id='native-pop'><label for='#native-pop'>Native Population (Census)</label></div>")
         document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='about-layer-check' id='about-toggle'><a>More About this Map</a></div>")
 
         //toggle for treaty layers
