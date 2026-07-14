@@ -456,7 +456,7 @@
     //create layer toggle
     function layerToggle(element) {
         document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input type='checkbox' id='treaties'><label for='#treaties'>Treaty Outlines</label></div>")
-        document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input disabled type='checkbox' id='native-pop'><label for='#native-pop'>Native Population (After 1900)</label></div>")
+        document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='layer-check'><input disabled type='checkbox' id='native-pop'><label for='#native-pop'>Native Population (after 1900) by county</label></div>")
         document.querySelector(element).insertAdjacentHTML("beforeend", "<div class='about-layer-check' id='about-toggle'><a>More About this Map</a></div>")
 
         //toggle for treaty layers
