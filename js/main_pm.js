@@ -40,7 +40,7 @@
         //create legend
         createLegend();
         //create timeline container based on screensize
-        if (window.screen.width >= 500)
+        if (window.screen.width >= 768)
             createTimelineContainer("topright");
         else
             createTimelineContainer("bottomleft");
@@ -241,7 +241,9 @@
             opacity: (z, f) => {
                 let homesteadYear = f.props.Date ? f.props.Date.substr(f.props.Date.length - 4) : f.props.Date.substr(f.props.Date.length - 4)
                 homesteadYear = homesteadYear.indexOf('/') > -1 ? '19' + homesteadYear.substr(2) : homesteadYear.indexOf('-') > -1 ? '19' + homesteadYear.substr(2) : homesteadYear;
-
+                if (z >= 9){
+                    console.log(f)
+                }
                 return homesteadYear <= year ? 1 : 0;
             },
             width: 0
@@ -344,7 +346,7 @@
         let min = 1862;
 
         //add dropdown menu
-        document.querySelector(element).insertAdjacentHTML('beforeend', '<p>Selected Year: <select id="year-dropdown"></selection></p>')
+        document.querySelector(element).insertAdjacentHTML('beforeend', '<p>Selected Year:<select id="year-dropdown"></selection></p>')
         for (var i = min; i <= max; i++) {
             document.querySelector("#year-dropdown").insertAdjacentHTML('beforeend', '<option id="year-dropdown">' + i + '</option>')
         }

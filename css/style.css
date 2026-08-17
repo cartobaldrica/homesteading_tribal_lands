@@ -347,12 +347,25 @@ h4{
     background-repeat: no-repeat;
     background-size:cover;
   }
+
 }
 @media screen and (max-width: 768px){
   .background{
     background-image:url("../img/homestead-act-xl.jpg");
     background-repeat: no-repeat;
     background-size:cover;
+  }
+  .timeline{
+    width:calc(100vw - 20px);
+  }
+  .timeline p {
+    display:inline;
+  }
+  .range-slider{
+    display:none;
+  }
+  .step{
+    width:30px;
   }
 }
 @media screen and (max-width: 576px) {
@@ -378,9 +391,5 @@ h4{
   }
   .overview{
     margin-top:20px !important;
-  }
-  .timeline{
-    width:calc(100vw - 20px);
-    bottom:20px;
   }
 }
