@@ -24,6 +24,9 @@ body{
 .container-fluid{
   padding:0 !important;
 }
+h1{
+  font-size: 36px;
+}
 /*homepage*/
 .background{
   height:calc(100vh);
@@ -194,14 +197,19 @@ h4{
     padding-right:10px;
     font-family:neuton;
 }
+/*title*/
+#title{
+  font-weight:bold;
+}
 /*dropdown menu*/
 #year-dropdown{
   background:#29293d;
   color:white;
   border: white 1px solid;
   font-family:neuton;
-  font-size:16px;
-  padding-bottom:2px;
+  font-size:24px;
+  padding-bottom:5px;
+  padding-left:5px;
 }
 /*timeline slider*/
 .range-slider{
@@ -260,42 +268,79 @@ h4{
 }
 /*OVERVIEW*/
 .timeline{
-  width:400px;
+  height:100%;
+  width:385px;
   font-family:neuton;
   font-size:18px;
-  background:#f2f2f2;
-  border:1px solid rgba(0,0,0,0.2);
+  background:none;
   padding:10px;
-  color:black;
+  color:white;
 }
 #about{
   overflow:scroll;
-  height:40vh;
   margin-top:20px;
-  display:none;
 }
 #about p {
   font-size:16px;
+  line-height:18px;
+  margin-bottom:5px;
 }
 /*LEGEND*/
+.leaflet-top{
+  height:100% !important;
+}
 .legend{
   font-family:neuton;
-  background:#f2f2f2;
-  padding:10px;
-  font-size:16px;
-  border:1px solid rgba(0,0,0,0.2);
-  color:black;
+  background:none;
+  border:none;
+  padding-top:25px;
+  padding-bottom:10px;
+}
+.native-pop-legend-container, .parcel-block-legend-container{
+  display:inline-block; 
+  height:120px;
+}
+.parcel-block-legend-container{
+  width:210px;
+}
+.native-pop-legend-container{
+  width:120px;
+  margin-left:25px;
 }
 .parcel-legend{
-  margin-top:5px;
-  margin-bottom:5px;
-  vertical-align: middle;
+  margin:0;
+  height:20px;
+  font-size: 16px;
+}
+.legend-label{
+  bottom: 4px;
+  display: inline-block;
+  position: relative;
+  margin-left:5px;
+}
+.parcel-legend-label{
+  font-weight:normal;
+
 }
 .legend-block{
-  width:30px;
-  height:20px;
+  width:40px;
+  height:23px;
   display:inline-block;
-  margin-right:5px;
+}
+.legend-rotate{
+  width: 40px;
+  height: 80px;
+  bottom: 15px;
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  line-height:16px;
+}
+#tribal-land{
+  margin-top:15px;
+}
+#tribal-land b{
+  font-weight: bold !important;
 }
 .layer-check label{
   padding-left:5px;
@@ -308,15 +353,26 @@ h4{
 .about-layer-check:hover{
   cursor:pointer;
 }
+.native-pop-circle-container{
+  width:40px;
+  display:inline-block;
+  text-align:center;
+}
+.native-pop-legend-title{
+  padding-bottom:10px;
+  height:25px;
+}
 .native-pop-legend{
   border-radius:50%;
   background:#a3a3c2;
-  display:inline-block;
+  vertical-align: middle;
+  display: inline-block;
 }
 .native-pop-caption{
   display:inline-block !important;
   margin-right:5px;
-  margin-bottom:5px;
+  margin-bottom:0px;
+  vertical-align:middle;
 }
 /*navbar*/
 .navbar{
@@ -355,17 +411,9 @@ h4{
     background-repeat: no-repeat;
     background-size:cover;
   }
-  .timeline{
-    width:calc(100vw - 20px);
-  }
-  .timeline p {
-    display:inline;
-  }
-  .range-slider{
-    display:none;
-  }
-  .step{
-    width:30px;
+  .bottom-info{
+    position: absolute;
+    bottom: 25px;
   }
 }
 @media screen and (max-width: 576px) {

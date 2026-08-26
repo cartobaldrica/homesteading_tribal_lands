@@ -1,3 +1,15 @@
+# Mapping the Homestead Act
+
+The map is viewable [here](index.html)
+
+## What the Map Shows
+
+Lands titled under the Homestead Act of 1862, including: 96% of homestead parcels in Michigan, 100.1% of homestead parcels in Minnesota, 96% of homestead parcels in Wisconsin. Parcels acquired through the Indian Homestead Acts, and treaty designations and reservation boundaries, and American Indian populations by county based on decennial censuses.
+
+## What the map does not show:
+
+The extent of Native interaction with homesteaders, and overall resistance to settlement, failed homestead attempts, American Indian people not counted by the census.
+
 # Making the Map
 
 ## Creating the Homestead Dataset
