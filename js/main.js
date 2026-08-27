@@ -3,7 +3,7 @@
 //show/toggle native population—add light county boundaries
 (function () {
     //symbol colors
-    let homesteadCurrentColor = "#ff9999", homesteadPastColor = "#cc0000", nhCurrentColor = "#b8b894", nhPastColor = "#6b6b47", reservationColor = "#e0e0d1", dawesCurrentColor = "#9fbfdf", dawesPastColor = "#4080bf";
+    let homesteadCurrentColor = "#ff9999", homesteadPastColor = "#cc0000", nhCurrentColor = "#b8b894", nhPastColor = "#6b6b47", reservationColor = "#e0e0d1", dawesCurrentColor = "#b3b3cc", dawesPastColor = "#666699";
     //map variables
     let map,
         mn, wi, mi, nh, dawes,
@@ -332,11 +332,11 @@
         //add next step button
         document.querySelector(element).insertAdjacentHTML('beforeend', '<button class="step" id="forward">></button>');
         //create legend
-        let legendHtml = "<div class='legend'><div class='parcel-block-legend-container'><p class='parcel-legend'><b class='legend-rotate'>Sel. Year</b><b class='legend-rotate'>Past Years</b></p>" +
+        let legendHtml = "<div class='legend'><div class='parcel-block-legend-container'><p class='parcel-legend'><b id='legend-year' class='legend-rotate'>" + year + "</b><b class='legend-rotate'>Past Years</b></p>" +
         "<p class='parcel-legend'><b class='legend-block' style='background:" + homesteadCurrentColor + "'></b><b class='legend-block' style='background:" + homesteadPastColor + "'></b><b class='legend-label parcel-legend-label'>Titled Homesteads</b></p>" +
         "<p class='parcel-legend'><b class='legend-block' style='background:" + nhCurrentColor + "'></b><b class='legend-block' style='background:" + nhPastColor + "'></b><b class='legend-label parcel-legend-label'>Native Homesteads</b></p>" +
         "<p class='parcel-legend'><b class='legend-block' style='background:" + dawesCurrentColor + "'></b><b class='legend-block' style='background:" + dawesPastColor + "'></b><b class='legend-label parcel-legend-label'>Allotments</b></p>" +
-        "<p id='tribal-land' class='parcel-legend'><b class='legend-block'></b><b class='legend-block' style='background:" + reservationColor + "'></b><b class='legend-label'>Leg. Tribal Lands</b></p></div></div>";
+        "<p id='tribal-land' class='parcel-legend'><b class='legend-block' style='background:" + reservationColor + "'></b><b class='legend-block' style='background:" + reservationColor + "'></b><b class='legend-label'>Reservation Land</b></p></div></div>";
 
         document.querySelector(element).insertAdjacentHTML('beforeend',legendHtml)
         //update value
@@ -393,7 +393,8 @@
                     fillOpacity: setOpacity(feature.properties.DECADE)
                 }
             })
-
+            //update year in legend
+            document.querySelector('#legend-year').innerHTML = year
             //remove native population if before 1900
             if (year <= 1900 && showNativePop == true){
                 document.querySelector(".native-pop-legend-container").remove();
