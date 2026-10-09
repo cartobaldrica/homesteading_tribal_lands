@@ -107,7 +107,7 @@
                     pointToLayer: function (feature, latLng) {
                         let options = {
                             fillColor: "#a3a3c2",
-                            opacity: 0,
+                            opacity:0,
                             fillOpacity: setOpacity(feature.properties.DECADE),
                             radius: setRadius(feature.properties.NATIVE_POP),
                             interactive: false,
@@ -336,9 +336,24 @@
         "<p class='parcel-legend'><b class='legend-block' style='background:" + homesteadCurrentColor + "'></b><b class='legend-block' style='background:" + homesteadPastColor + "'></b><b class='legend-label parcel-legend-label'>Titled Homesteads</b></p>" +
         "<p class='parcel-legend'><b class='legend-block' style='background:" + nhCurrentColor + "'></b><b class='legend-block' style='background:" + nhPastColor + "'></b><b class='legend-label parcel-legend-label'>Native Homesteads</b></p>" +
         "<p class='parcel-legend'><b class='legend-block' style='background:" + dawesCurrentColor + "'></b><b class='legend-block' style='background:" + dawesPastColor + "'></b><b class='legend-label parcel-legend-label'>Allotments</b></p>" +
-        "<p id='tribal-land' class='parcel-legend'><b class='legend-block' style='background:" + reservationColor + "'></b><b class='legend-block' style='background:" + reservationColor + "'></b><b class='legend-label'>Reservation Land</b></p></div></div>";
+        "<p id='tribal-land' class='parcel-legend'><b class='legend-block' style='background:" + reservationColor + "'></b><b class='legend-block' style='background:" + reservationColor + "'></b><b class='legend-label'>Reservation Land</b></p></div></div>" + 
+        "<b class='legend-rotate' id='show-legend'>Hide Legend</b>";
 
         document.querySelector(element).insertAdjacentHTML('beforeend',legendHtml)
+        //add hide legend fuctionality
+        let showLegend = true;
+        document.querySelector("#show-legend").addEventListener("click",function(elem){
+            if (showLegend){
+                document.querySelector(".parcel-block-legend-container").style.display = 'none';
+                showLegend = false;
+                document.querySelector("#show-legend").innerHTML = 'Show Legend';
+            }
+            else{
+                document.querySelector(".parcel-block-legend-container").style.display = 'block';
+                showLegend = true;
+                document.querySelector("#show-legend").innerHTML = 'Hide Legend';
+            }
+        })  
         //update value
         //on button click
         var steps = document.querySelectorAll('.step');

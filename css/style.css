@@ -405,6 +405,13 @@ h4{
   .timeline{
     width:385px;
   }
+  #about{
+      bottom: 25px;
+      position: absolute;
+  }
+  #show-legend{
+    display: none;
+  }
 
 }
 @media screen and (max-width: 768px){
@@ -424,6 +431,21 @@ h4{
   }
   .timeline{
     max-width:385px;
+  }
+  .legend{
+    padding-top:10px;
+  }
+  .parcel-block-legend-container{
+    display: block;
+  }
+  #show-legend{
+    width:100px;
+    font-size:14px;
+    font-style: italic;
+    text-decoration: underline;
+  }
+  #show-legend:hover{
+    cursor: pointer;
   }
 }
 @media screen and (max-width: 576px) {
